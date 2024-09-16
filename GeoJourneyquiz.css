@@ -1,0 +1,52 @@
+
+body {
+    font-family: 'Questrial', sans-serif;
+    margin: 15px;
+    background: #859ebf;
+    text-align: center;
+  }
+
+  #questionTracker{
+  background-color: aliceblue;
+  float: right;
+  color: #212529;
+  border-radius: 25px;
+  height: 8%;
+  width: 8%;
+}
+
+
+
+  h1 {
+    font-family:'Garamond',sans-serif;
+    font-size: 42px;
+  }
+  
+h2 {
+    display: flex;
+    color: #212529;
+    justify-content: center;
+    background: #c1cfbb;
+    padding: 30px;
+    margin: 25px;
+    border-bottom: 4px solid #ebe1c5;
+  }
+
+h3 {
+    font-family: 'Questrial', sans-serif;
+    padding: 5px;
+  }
+  
+button {
+    background-color: #bcb8c7; 
+    border: 3px;
+    color: white;
+    padding: 15px 32px;
+    margin: 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 24px;
+    border-radius: 12px;
+  }
+

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="GeoJourneyquiz.css"> 
+    <title>GeoJourney</title>
+</head>
+<body>
+    <div id="questionTracker"></div>
+    <h1>Geojourney</h1>
+    
+   
+    <div id="questionAmountOptions">
+        <h3>How many questions would you like to answer?</h3>
+        <button onclick="QuestionAmount(10)">10 Questions</button>
+        <button onclick="QuestionAmount(15)">15 Questions</button>
+        <button onclick="QuestionAmount(20)">20 Questions</button>
+        <button onclick="QuestionAmount(25)">25 Questions</button>
+    </div>
+    
+    
+    <h2 id="questionSpace"></h2>
+    <div id="choiceSpace"></div>
+    <h3 id="message"></h3>
+    <h3 id="levelMessage"></h3>
+    <h3 id="feedbackSpace"></h3>
+    <h3 id="infoSpace"></h3>
+    <button id="nextButton" style="display:none;" onclick="nextQuestion()">Next Question</button>
+
+    <script>
+       
+        var questionSpace = document.getElementById("questionSpace");
+        var choiceSpace = document.getElementById("choiceSpace");
+        var message = document.getElementById("message");
+        var levelMessage = document.getElementById("levelMessage");
+        var feedbackSpace = document.getElementById("feedbackSpace");
+        var infoSpace = document.getElementById("infoSpace");
+        var nextButton = document.getElementById("nextButton");
+
+        var quizQuestions = [ 
+        {
+                question: "What is the capital city of New Zealand?",
+                answer: "Wellington",
+                choices: ["Wellington", "Alabama", "Minnesota", "Arkansas"],
+                info: "Wellington has been the capital city of New Zealand since 1865"
+            },
+            {
+                question: "What is the capital city of Japan?",
+                answer: "Tokyo",
+                choices: ["Venice", "Shibuya", "Tokyo", "Mississippi"],
+                info: "Tokyo became the capital after the emperor moved to Edo, now called Tokyo"
+            },
+            {
+                question: "What is the capital city of Canada?",
+                answer: "Ottawa",
+                choices: ["Venice", "Shibuya", "Toronto", "Ottawa"],
+                info: "Did you know that in 1857 Queen Victoria of Britain chose Ottawa to be the capital of Canada."
+            },
+            {
+                question: "What is the capital city of the United States?",
+                answer: "Washington",
+                choices: ["Washington", "Shibuya", "Tokyo", "Mississippi"],
+                info: "Washington"
+            },
+            {
+                question: "What is the capital city of Australia?",
+                answer: "Canberra",
+                choices: ["Venice", "Wellington", "Tokyo", "Canberra"],
+                info: "Canberra"
+            },
+            {
+                question: "Which of these is not one of the Seven Wonders of the World?",
+                answer: "Stonehenge",
+                choices: ["Great Wall of China", "Christ the Redeemer", "Stonehenge", "Colosseum"],
+                info: "The Seven Wonders of the World include the Great Wall of China, Petra, Christ the Redeemer, Machu Picchu, Chichen Itza, the Colosseum, and the Taj Mahal. Stonehenge is a famous prehistoric monument but is not part of this list."
+            },
+            {
+                question: "Which country is known as the Land of the Rising Sun?",
+                answer: "Japan",
+                choices: ["China", "Japan", "South Korea", "Thailand"],
+                info: "Japan is called the Land of the Rising Sun because it is situated to the east of the Asian continent, where the sun rises."
+            },
+            {
+                question: "Which country is the largest by land area?",
+                answer: "Russia",
+                choices: ["Canada", "China", "United States", "Russia"],
+                info: "Russia is the largest country in the world by land area, covering over 17 million square kilometers."
+            },
+            {
+                question: "Which country is famous for its pyramids?",
+                answer: "Egypt",
+                choices: ["Greece", "Egypt", "Mexico", "Italy"],
+                info: "Egypt is known for its ancient pyramids, including the Great Pyramid of Giza, one of the Seven Wonders of the Ancient World."
+            },
+            {
+                question: "Which country is home to the city of Sydney?",
+                answer: "Australia",
+                choices: ["New Zealand", "South Africa", "Australia", "United Kingdom"],
+                info: "Sydney is a major city in Australia known for its iconic Sydney Opera House and Harbour Bridge."
+            },
+            {
+                question: "Which country is known for the Eiffel Tower?",
+                answer: "France",
+                choices: ["Spain", "France", "Italy", "Belgium"],
+                info: "The Eiffel Tower is a famous landmark located in Paris, France."
+            },
+            {
+                question: "Which country is renowned for its tulip fields?",
+                answer: "Netherlands",
+                choices: ["Netherlands", "Belgium", "Denmark", "Sweden"],
+                info: "The Netherlands is famous for its extensive tulip fields and the annual Keukenhof flower show."
+            },
+            {
+                question: "Which country is known for having a maple leaf on its flag?",
+                answer: "Canada",
+                choices: ["Australia", "Canada", "United States", "Brazil"],
+                info: "Canada's national flag features a red maple leaf, which is a symbol of the country's natural heritage."
+            },
+            {
+                question: "Which country is known for the Great Barrier Reef?",
+                answer: "Australia",
+                choices: ["Australia", "Fiji", "Thailand", "Indonesia"],
+                info: "The Great Barrier Reef, located off the coast of Queensland, Australia, is the largest coral reef system in the world."
+            },
+            {
+                question: "Which country is famous for its sushi cuisine?",
+                answer: "Japan",
+                choices: ["Japan", "South Korea", "China", "Vietnam"],
+                info: "Sushi is a traditional Japanese dish made with vinegared rice and various ingredients like seafood and vegetables."
+            },
+            {
+                question: "What is the longest river in the world?",
+                answer: "Nile",
+                choices: ["Amazon", "Yangtze", "Nile", "Mississippi"],
+                info: "The Nile River is traditionally considered the longest river in the world, flowing through northeastern Africa."
+            },
+            {
+                question: "Which mountain is the highest peak in the world?",
+                answer: "Mount Everest",
+                choices: ["Mount Ruapehu", "Kangchenjunga", "Mount Everest", "Makalu"],
+                info: "Mount Everest, located in the Himalayas, is the highest peak in the world, reaching 8,848 meters (29,029 feet) above sea level."
+            },
+            {
+                question: "Which ocean is the largest by surface area?",
+                answer: "Pacific Ocean",
+                choices: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
+                info: "The Pacific Ocean is the largest and deepest ocean on Earth, covering more than 63 million square miles."
+            },
+            {
+                question: "Which river is known for flowing through the Grand Canyon?",
+                answer: "Colorado River",
+                choices: ["Missouri River", "Amazon River", "Colorado River", "Yangtze River"],
+                info: "The Colorado River is famous for carving out the Grand Canyon over millions of years."
+            },
+            {
+                question: "Which mountain range separates Europe and Asia?",
+                answer: "Ural Mountains",
+                choices: ["Andes Mountains", "Rocky Mountains", "Ural Mountains", "Himalayas"],
+                info: "The Ural Mountains form the traditional boundary between Europe and Asia."
+            },
+            {
+                question: "Which is the largest desert in the world?",
+                answer: "Antarctic Desert",
+                choices: ["Sahara Desert", "Arabian Desert", "Antarctic Desert", "Gobi Desert"],
+                info: "The Antarctic Desert is the largest desert in the world by area, covering about 14 million square kilometers."
+            },
+            {
+                question: "Which river flows through Cairo?",
+                answer: "Nile",
+                choices: ["Amazon", "Nile", "Yangtze", "Danube"],
+                info: "The Nile River flows through Cairo, providing a vital source of water for Egypt."
+            },
+            {
+                question: "What is the highest volcano in the world?",
+                answer: "Ojos del Salado",
+                choices: ["Mount St. Helens", "Mount Kilimanjaro", "Ojos del Salado", "Mount Fuji"],
+                info: "Ojos del Salado, located on the border between Chile and Argentina, is the highest active volcano in the world."
+            },
+            {
+                question: "Which country is home to the Andes mountain range?",
+                answer: "Chile",
+                choices: ["Argentina", "Chile", "Peru", "Bolivia"],
+                info: "The Andes mountain range stretches along the western edge of South America, with Chile having a significant portion of the range."
+            },
+            {
+                question: "What is the deepest ocean trench in the world?",
+                answer: "Mariana Trench",
+                choices: ["Puerto Rico Trench", "Java Trench", "Mariana Trench", "Tonga Trench"],
+                info: "The Mariana Trench is the deepest oceanic trench in the world, with the Challenger Deep being the lowest point."
+            },
+
+
+            
+        ];
+
+        var selectedQuestionAmount = 0; // Variable to store the number of questions chosen
+        var shuffledQuestions = [];
+        var questionState = 1;
+        var score = 0;
+        var hasAnswered = false; //This variable tracks or determines whether or not the user has already answered
+
+        //Fisher-Yates algorithm
+        function shuffleArray(array) {
+            let shuffled = array.slice();
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const randomIndex = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[i]]; // Swap
+            }
+            return shuffled;
+        }
+
+      
+        function QuestionAmount(amount) { //Making the amount of questions from the option the user's chosen
+            selectedQuestionAmount = amount;
+            document.getElementById('questionAmountOptions').style.display = 'none'; //hides the button - ('none')
+            startQuiz(); // starts quiz right after the amount of questions has been chosen
+            
+           
+        }
+
+        
+        function update() {
+            if (questionState < selectedQuestionAmount) { // Use the selected amount instead of quizQuestions.length
+                questionSpace.innerHTML = shuffledQuestions[questionState].question;
+                var choicesHtml = '';
+                shuffledQuestions[questionState].choices.forEach((choice) => {
+                    choicesHtml += `<button onclick="checkAnswer('${choice}')">${choice}</button>`;
+                });
+                choiceSpace.innerHTML = choicesHtml;
+                feedbackSpace.innerHTML = "";
+                nextButton.style.display = "none";
+                infoSpace.innerHTML = "";
+            }
+        }
+
+        function questionTracker() {
+            var questionTracker = document.getElementById("questionTracker");
+            questionTracker.innerHTML = questionState + "/" + selectedQuestionAmount;
+        }
+
+      
+        function checkAnswer(choice) { // Checks whether the input is correct/ incorrect
+            if (hasAnswered) return; // Prevent further selection after an answer is given
+            hasAnswered = true; // Set the flag to true after an answer is selected
+
+            if (choice === shuffledQuestions[questionState].answer) {
+                feedbackSpace.innerHTML = "Correct!";
+                score++; // adds 1 to the score
+            } else {
+                feedbackSpace.innerHTML = `Incorrect! The correct answer is ${shuffledQuestions[questionState].answer}.`;
+            }
+            infoSpace.innerHTML = shuffledQuestions[questionState].info;
+            questionState++;
+            nextButton.style.display = "block"; // Show the Next button after answering
+            
+        }
+
+        // Move to Next Question
+        function nextQuestion() {
+            if (questionState < selectedQuestionAmount) {
+                hasAnswered = false; 
+                questionTracker()
+                update();
+               
+            } else {
+                message.innerHTML = "Your score is " + score + "/" + selectedQuestionAmount;
+                questionSpace.innerHTML = "";
+                choiceSpace.innerHTML = "";
+                feedbackSpace.innerHTML = "";
+                infoSpace.innerHTML = "";
+                nextButton.style.display = "none";
+                level()
+                questionTracker()
+                
+                
+            }
+
+           
+        }
+
+        function level() {
+            if (score < 5) { //When score is less than 5 
+                levelMessage.innerHTML = "Points for participation, try again"; 
+               
+            } else if (score < 10) { // If the score is less than 10
+                levelMessage.innerHTML = "Good Job, only a little practice left";
+
+            } else { //If the score doesn't apply to the past two statements/ it is more than 10.
+                levelMessage.innerHTML = "Amazing, you know your geography!";
+            }
+
+        }
+
+        // Start the Quiz
+        function startQuiz() {
+            shuffledQuestions = shuffleArray(quizQuestions);  // Shuffle the quiz questions when the quiz starts
+            shuffledQuestions = shuffledQuestions.slice(0, selectedQuestionAmount); // Limit the array to the selected amount
+            questionState = 1;
+            score = 0;
+            message.innerHTML = "";
+            update();  // Display the first question
+            questionTracker()
+          
+            
+        }
+
+    </script>
+</body>
+</html>
